@@ -27,7 +27,6 @@ window.config(padx=100, pady=50)
 canvas = Canvas(width=200, height=224)
 tomato_background = PhotoImage(file="tomato.png")
 canvas.create_image(103, 110, image=tomato_background)
-# canvas.create_text()
 canvas.pack()
 
 

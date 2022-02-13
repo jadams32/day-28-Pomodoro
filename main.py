@@ -13,13 +13,33 @@ FONT_NAME = "Courier"
 WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
-
+reps = 0
 # ---------------------------- TIMER RESET ------------------------------- # 
 
-# ---------------------------- TIMER MECHANISM ------------------------------- # 
+# ---------------------------- TIMER MECHANISM ------------------------------- #
+
+
 def start_timer():
-    countdown(25 * 60)
-# ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+    global reps
+    work_seconds = WORK_MIN * 60
+    short_break_minutes = SHORT_BREAK_MIN * 60
+    long_break_minutes = LONG_BREAK_MIN * 60
+
+    reps += 1
+
+    if reps % 2 == 0:
+        countdown(short_break_minutes)
+
+    elif reps % 8 == 0:
+        countdown(long_break_minutes)
+
+    else:
+        countdown(work_seconds)
+
+
+# ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
+
+
 def countdown(count):
     count_minutes = math.floor(count / 60)
     count_seconds = count % 60
@@ -31,7 +51,11 @@ def countdown(count):
 
     canvas.itemconfig(timer_text, text=f"{count_minutes}:{count_seconds}")
     if count > 0:
-        window.after(1000, countdown, count -1)
+        window.after(1000, countdown, count - 1)
+    else:
+        start_timer()
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
@@ -43,8 +67,6 @@ tomato_background = PhotoImage(file="tomato.png")
 canvas.create_image(100, 110, image=tomato_background)
 timer_text = canvas.create_text(100, 135, text="00:00", fill="white", font=(FONT_NAME, 35, "bold"))
 canvas.grid(column=1, row=1)
-
-
 
 reset_button = Button(text="RESET")
 reset_button.grid(column=2, row=2)

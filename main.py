@@ -14,15 +14,26 @@ WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 reps = 0
-# ---------------------------- TIMER RESET ------------------------------- # 
+timer = None
+# ---------------------------- TIMER RESET ------------------------------- #
+
+
+def reset_timer():
+    global reps
+    window.after_cancel(timer)
+    canvas.itemconfig(timer_text, text=f"00:00")
+    level_check_mark.config(text="")
+    timer_label.config(text="Timer", fg=GREEN)
+    reps = 0
+
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
 
 
 def start_timer():
     global reps
-    work_seconds = 1 * 60
-    short_break_minutes = 1 * 60
+    work_seconds = .25 * 60
+    short_break_minutes = .25 * 60
     long_break_minutes = LONG_BREAK_MIN * 60
 
     reps += 1
@@ -44,6 +55,7 @@ def start_timer():
 
 
 def countdown(count):
+    global timer
     count_minutes = math.floor(count / 60)
     count_seconds = count % 60
 
@@ -54,7 +66,7 @@ def countdown(count):
 
     canvas.itemconfig(timer_text, text=f"{count_minutes}:{count_seconds}")
     if count > 0:
-        window.after(1000, countdown, count - 1)
+        timer = window.after(1000, countdown, count - 1)
     else:
         start_timer()
         check_marks = ""
@@ -76,13 +88,13 @@ canvas.create_image(100, 110, image=tomato_background)
 timer_text = canvas.create_text(100, 135, text="00:00", fill="white", font=(FONT_NAME, 35, "bold"))
 canvas.grid(column=1, row=1)
 
-reset_button = Button(text="RESET")
+reset_button = Button(text="RESET", command=reset_timer)
 reset_button.grid(column=2, row=2)
 
 start_button = Button(text="START", command=start_timer)
 start_button.grid(column=0, row=2)
 
-level_check_mark = Label(font=FONT_NAME, fg=GREEN, bg=YELLOW)
+level_check_mark = Label(font=(FONT_NAME, 35), fg=GREEN, bg=YELLOW)
 level_check_mark.grid(column=1, row=3)
 
 timer_label = Label(text="TIMER", font=(FONT_NAME, 50), fg=GREEN, bg=YELLOW)

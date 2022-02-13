@@ -21,8 +21,8 @@ reps = 0
 
 def start_timer():
     global reps
-    work_seconds = WORK_MIN * 60
-    short_break_minutes = SHORT_BREAK_MIN * 60
+    work_seconds = 1 * 60
+    short_break_minutes = 1 * 60
     long_break_minutes = LONG_BREAK_MIN * 60
 
     reps += 1
@@ -57,6 +57,11 @@ def countdown(count):
         window.after(1000, countdown, count - 1)
     else:
         start_timer()
+        check_marks = ""
+        work_reps = (math.floor(reps/2))
+        for item in range(work_reps):
+            check_marks += "✓"
+            level_check_mark.config(text=check_marks)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -77,7 +82,7 @@ reset_button.grid(column=2, row=2)
 start_button = Button(text="START", command=start_timer)
 start_button.grid(column=0, row=2)
 
-level_check_mark = Label(text="✓", font=FONT_NAME, fg=GREEN, bg=YELLOW)
+level_check_mark = Label(font=FONT_NAME, fg=GREEN, bg=YELLOW)
 level_check_mark.grid(column=1, row=3)
 
 timer_label = Label(text="TIMER", font=(FONT_NAME, 50), fg=GREEN, bg=YELLOW)

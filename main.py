@@ -3,6 +3,7 @@
 
 from tkinter import *
 import math
+import pygame
 
 # ---------------------------- CONSTANTS ------------------------------- #
 PINK = "#e2979c"
@@ -15,6 +16,11 @@ SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 reps = 0
 timer = None
+
+# ------------------------------- MUSIC ---------------------------------- #
+
+pygame.mixer.init()
+
 # ---------------------------- TIMER RESET ------------------------------- #
 
 
@@ -32,22 +38,28 @@ def reset_timer():
 
 def start_timer():
     global reps
-    work_seconds = .25 * 60
-    short_break_minutes = .25 * 60
+    work_seconds = WORK_MIN * 60
+    short_break_minutes = SHORT_BREAK_MIN * 60
     long_break_minutes = LONG_BREAK_MIN * 60
 
     reps += 1
 
-    if reps % 2 == 0:
-        countdown(short_break_minutes)
-        timer_label.config(text="Short Break", fg=PINK)
-
-    elif reps % 8 == 0:
+    if reps % 8 == 0:
         countdown(long_break_minutes)
+        pygame.mixer.music.load("stop.wav")
+        pygame.mixer.music.play(loops=0)
         timer_label.config(text="Long Break", fg=RED)
+
+    elif reps % 2 == 0:
+        countdown(short_break_minutes)
+        pygame.mixer.music.load("stop.wav")
+        pygame.mixer.music.play(loops=0)
+        timer_label.config(text="Short Break", fg=PINK)
 
     else:
         countdown(work_seconds)
+        pygame.mixer.music.load("start.wav")
+        pygame.mixer.music.play(loops=0)
         timer_label.config(text="Work!", fg=GREEN)
 
 
